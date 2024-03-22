@@ -2,15 +2,15 @@
 
 % use the oxycomps style file
 \usepackage{oxycomps}
-\usepackage{xcolor}
+\usepackage{float}
 
 \pdfinfo{
-    /Title (An Introductory Tutorial to Git)
+    /Title (Tutorial Report)
     /Author (Oliver Wilkins)
 }
 
 % set the title and author information
-\title{An Introductory Tutorial to Git}
+\title{Tutorial Report}
 \author{Oliver Wilkins}
 \affiliation{Occidental College}
 \email{wilkins@oxy.edu}
@@ -21,156 +21,62 @@
 
 \section{Introduction}
 
-This tutorial will provide a basic introduction to git, with the intended audience being someone who is new to version control and wishes to use it for a long-term project. It assumes you will be using a command line interface on mac, with GitHub as the location for the remote repository. If you do not have a GitHub account, create one prior to following the tutorial. 
+My current thinking with regards to my Comps is to use simulation techniques to estimate of the loss aversion coefficient A, which measures the degree to which people psychologically ‘overweight’ losses relative to gains. There is a large literature in both economics and psychology around finding empirical estimations of A, with most estimates falling between 1 and 4. This relatively large range can be explained partially by the fact that many estimates are made by conducting a single study and backing out what the participant’s loss aversion coefficient must have been given that they made the decisions they did. The estimate obtained is therefore highly dependent on the context of the specific study and the makeup of its participants. Additionally, many of the studies rely on asking participants hypothetical questions, which may elicit unrealistic answers due to the lack of stakes involved.
 
-Git is a version control system which helps developers keep their work organized by keeping track of what has been changed, when, and by whom. Learning how to use git is a worthwhile investment for a number of reasons. Firstly, it is used by nearly everyone who works in the computer science area, and is therefore important to know for the purpose of being able to find jobs and do them well. Beyond this, git is useful to know even for someone who does not intend to pursue work in the tech industry. Especially when working on large projects, it is important to be able to track changes and ensure your work does not get lost. Tracking changes is important because it allows you to go back to a previous version of your work if you accidentally break something, or to try out an experimental feature while leaving the primary version of your code unchanged. 
+To address the concerns described above, my plan is to model various large-scale systems which are influenced by loss aversion, such as the stock market, insurance markets, and savings behavior. I will then run simulations in which the participants in these systems have varying levels of loss aversion, which will be normally distributed with different means and standard deviations for each run, and choose as my estimate the one which produces results most consistent with empirical evidence across the various systems. My hope is this approach will generate an estimate most reflective of the entire population (at least within the west) given the scale and diversity of the systems modeled.
 
-Git works by storing files in four locations known as repositories, which can be though of as a storage location for a set of files. One is the remote repository (on GitHub), and three are local: the working directory, the staging area, and the local repository. The remote repository exists to store your work in a place while it will not be lost and can be easily shared with others. The three remote repositories exist as a place to make changes to your code and to organize them for the purpose of being sent to the remote repository. In this tutorial you will learn how to move files between these locations, as well as how to manage different versions of your work using stashing, branching, and merging. These terms will be defined as they are introduced. 
-
-
-\section{Initialize local Repository}
-
-In this tutorial we will be initializing the repository locally using git init and connecting it to remote later, but it is also possible to initialize the repository on GitHub and use git clone to make a local repository. 
-
-In terminal, create a new directory for your project and navigate to it. Add a file file1.txt and write the letters a, b, and c, each on a separate line.\\\\
-\textcolor{cyan}{
-mkdir git-tutorial\\
-cd git-tutorial\\
-touch file1.txt\\
-}
-
-In the directory, initialize a local repository.\\\\
-\textcolor{cyan}{
-git init\\
-}
-
-The git-tutorial directory has now been transformed into a git repository. This means we can move its files to the staging area and local repository, before ultimately pushing them to remote. 
+The tutorial I chose is relevant to my Comps topic in that it models a system and then runs it using various inputs in a ‘guess and check’ system in order to determine which input is best. In the tutorial, the system being modeled is a theater business, and the question it is answering is the optimal numbers of various types of staff to hire in order to keep wait times at a reasonable level. A successful outcome would be finding the minimum numbers of staff needed such that wait times are kept under 10 minutes, thereby minimizing costs such while maintaining a sufficient level of performance.
 
 
-\subsection{First Commit}
+\section{Methods}
 
-Let’s move our text file to the staging area. Any file we want to put in our local repository must go through the staging area first. \\\\
-\textcolor{cyan}{
-git add file1.txt\\
-}
+I completed the tutorial in the Jupyter notebook environment, using python and relying on the simpy package.
 
-Now that our text file is in the staging area we can add it to our local repository via a commit. Committing a file means that we want it to be included the next time we add files to our remote repository.\\\\
-\textcolor{cyan}{
-git commit\\
-}
-
-You will be prompted to add a comment to your commit. Write something about what you are changing, like “added file1, with a,b,c.” 
-
-\subsection{Connecting and pushing to Remote}
-
-Now that we have a local repository with a commit, it is time to connect to remote. This assigns a remote repository to our local one to which we can add our files. In GitHub, create an empty repository named git-tutorial. 
-
-Back in terminal, type the following command:\\\\
-\textcolor{cyan}{
-git remote add origin https://github.com/yourUsername/git-tutorial.git\\
-}
-
-This command adds the GitHub repository we just created as a remote associated with the local repository. ‘origin’ is a name we are assigning to the url so that we do not have to type it out again. We will now ‘push’ our local repository to remote. Pushing means to move what whatever files have been committed since our last push into our remote repository on GitHub. \\\\
-\textcolor{cyan}{
-git push --set-upstream origin main\\
-}
-
-In future pushes you will only need to type ‘git push’, the rest of the command is doing setup work that only needs to be done once. 
-
-Go back to GitHub and refresh the page. You should now see your file.txt in the repository. 
+The steps of the tutorial can be classified into two main processes: setting up the framework of the simulation, then iteratively running it with varying inputs to determine the best ones. The tutorial is primarily focused on the first of these and provides no guidance on the second other than instructing the user to manually guess and check different inputs until they find a solution. I deviated only slightly from the tutorial in setting up the simulation framework. Given that my comps will require checking many inputs and that each run of the simulation will likely take a non-negligible amount of time, I chose to automate the process of finding the ‘best’ input solution, which represents a significant deviation from the tutorial.
 
 
-\subsection{Pulling from Remote}
+\subsection{Simulation Framework}
 
-If you are working with other people, they may make changes to the remote repository which you want to see reflected in your local repository. To mimic this, we will add our own file in GitHub and ‘pull’ it to local. Pulling means to make your local repository match the remote one. In your GitHub repository, click on ‘add file’. Name it new-file.txt and write whatever you want in it. Click ‘commit changes’.
+Setting up the simulation framework began by defining the processes which make up the workings of the theater being simulated. There were three: selling tickets (done by cashiers), selling food (done by servers), and checking tickets (done by ushers). Each process took time, which was constant for selling and checking tickets and determined randomly within some range for selling food. If there were not any of the correct type of employee available when one of the services was needed, a line would form in a first in first out fashion. Defining the behavior of moviegoers was next. All moviegoers had to buy a ticket and have it checked, and with a 50\% probability chose to buy food. They also had an arrival time, which were distributed randomly over a set interval. The time each moviegoer took from arrival to when their ticket was finished being checked was tracked. 
 
-Back in terminal, pull from remote.\\\\
-\textcolor{cyan}{
-git pull\\
-}
+Once the theater processes and moviegoer behavior were set up, the simulation could be run. For a given run, a set of moviegoers were created and assigned to arrival times and food-buying statuses. The theater was given the chosen number of each employee, and time began. The simulation finished once the last moviegoer had their ticket checked, and the average total wait time was computed. 
 
-New-file.txt is now in your local repository.
+The only change I made to this section of the tutorial was to make the number of moviegoers in each run of the simulation fixed, as opposed to being random within some range. While it makes sense in the context of making management decisions about a movie theater to include variability in the number of patrons because that is reflective of reality, I am using simulation for a somewhat different purpose in my Comps. I am interested in the effect on systems of changing a single variable, and in order for the input testing (discussed in the next section) to be similar to how I will do it for my Comps any randomness within the model must occur enough times that any aggregate statistics about the agents within the simulation must be close to identical across different runs. Therefore, random decisions about arrival time or food preferences are okay because they occur many times, but a single random decision about the number of moviegoers is not. 
 
+\subsection{Input Testing}
 
-\subsection{Stashing}
+The tutorial had users test numbers of employees manually. This was practical since running the simulation took negligible time, and it was easy to get a feel for which type of employee was slowing down the theater's operations the most at any given point. I was able to get a solution which would be acceptable to the hypothetical manager of this theater within a couple minutes. However, this type of input testing approach likely would not work well for my Comps. I therefore deviated from the tutorial and wrote an automated input testing system. 
 
-Stashing is a technique which sets aside something you are working on so that you can have a clean working directory but still come back later to the thing you were working on. 
+The testing system answered two questions. The first was the same as the goal of the tutorial: to find the minimum numbers of employees needed to achieve sub-ten minute wait times. The second was to to rank each employee by their marginal time savings, i.e. the amount of time saved relative to having one fewer employee. This would be useful to a hypothetical theater manager because if they could calculate the marginal benefit of a one minute shorter wait time, via survey techniques or otherwise, they could hire employees up to the point that marginal benefit equals marginal cost (the wage of the employee). Such a technique is profit-maximizing by definition. 
 
-Create a file stash-file.txt and add it to the staging area.\\\\
-\textcolor{cyan}{
-touch stash-file.txt\\
-git add stash-file.txt\\
-}
+To answer the first question, I used a brute-force technique. I ran the simulation with every permutation of employee counts between 1 and 10 (numbers chosen based on my intuition from playing around with manual inputs), and chose the permutation with the fewest total employees that was under 10 minutes. 
 
-Now let’s stash this file away to come back to later. \\\\
-\textcolor{cyan}{
-git stash \\
-}
+To answer the second, I used the following algorithm. Run the simulation with one of each employee. Then, run the simulation three times with one more of each of the types (once with 2 cashiers, 1 server, 1 usher, once with 1, 2, 1, of the respective types, and once with 1, 1, 2). Determine which employee gives the most time gains relative to the initial run. Whichever one that is gets 'hired,' and included in the baseline for the next test. Repeat this process until 40 employees have been 'hired,' recording the time gains of each one. 
 
-If you run the ls command, you will see that stash-file.txt no longer shows up in the working directory. To see the stashes we have made, use the stash show command. \\\\
-\textcolor{cyan}{
-git stash show\\
-}
+\section{Metrics and Results}
 
-You will see the stash we just made. To add the stashed file back to our working directory, use stash pop.\\\\
-\textcolor{cyan}{
-git stash pop\\
-}
+The goal of building a simulation capable of finding the optimal number of employees to handle was achieved. The first metric by which it was achieved is that the simulation found the minimum number of employees needed to keep wait times under 10 minutes. The number turned out to be 16, with the distribution across employee types being 9 cashiers, 6 servers, and 1 usher. This result makes intuitive sense given the amount of time that the tasks of the respective employees take taken as well as the proportion of moviegoers who use each of their services. 
 
-The stash-file.txt file is now back in our working directory (and staging area). Since we do not want this file to be committed, let’s move it out of the staging area. We will use git status to track the contents of the staging area before and after to ensure it works.\\\\
-\textcolor{cyan}{
-git status\\
-git reset\\
-git status\\
-}
+The second metric by which the goal was achieved was via a calculation of each of the first 40 employee's marginal wait time savings benefit, assuming the most productive type of employee was chosen at every hiring decision. The charts below show the results of this calculation. The first is the total time by number of employees, which is included to help build context (including for the first metric). The second chart shows the marginal time savings by employee. If the hypothetical theater manager were to figure out the value of a minute of wait time savings, they could determine the optimal number of employees to hire by multiplying the y axis of the graph by the salary of an employee and finding which employee number corresponds to that value on the graph (again assuming the correct types are hired). 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{totals.png}
+    \caption{Total Time by Number of Employees}
+    \label{fig:enter-label}
+\end{figure}
 
-The stash file is no longer in the staging area, but is still in the local directory. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{marginal.png}
+    \caption{Marginal Time Savings by Employee}
+    \label{fig:enter-label}
+\end{figure}
 
+The degree to which the results of this simulation can be used to guide practical decisions speaks to the power of simulation as a tool, assuming the assumptions it makes are accurate. 
 
-\subsection{Branching}
+\section{Reflection}
 
-Branching can be used to make changes in a way that does not impact the main version of your work. It creates a new working area which can later be added back into the main one. We will make a new branch called new-branch.\\\\
-\textcolor{cyan}{
-git branch new-branch\\
-git branch\\
-}
+Completing this tutorial has given me confidence that my knowledge of specific softwares, programming languages, or libraries will not be a limiting factor in my Comps, since I expect the same tools used in the tutorial would be sufficient for my Comps project. 
 
-The git branch command (with no additional arguments) will show a list of all branches, and indicate which one you are currently on. It should show you as currently being on the main branch. Let’s switch to the new one. \\\\
-\textcolor{cyan}{
-git switch new-branch\\
-}
-
-In the new branch, edit the file1.txt file by adding an e on the line below c. Add and commit the file, then switch back to the main branch.\\\\
-\textcolor{cyan}{
-git add file1.txt\\
-git commit\\
-git switch main\\
-}
-
-Back in the main branch, edit file1.txt again, this time adding a d on the line below c. Add and commit.\\\\
-\textcolor{cyan}{
-git add file1.txt\\
-git commit\\
-}
-
-We now have two branches with two different versions of file1.txt.
-
-
-\subsection{Merging }
-
-Let’s merge our new branch into our main branch so that the changes we have made can be consolidated into one place. Merging means to combine two different versions of code into one. Make sure you are still in the main branch.\\\\
-\textcolor{cyan}{
-git merge new-branch\\
-}
-
-This command should generate an error. This is because both branches made changes to the same file in a way that git does not know how to handle. To fix this, open file1.txt. You will see both d and e in the file, with messages indicating which branch each came from. Edit the file so the letters are in alphabetical order. Add and commit the edited file, then push to remote. \\\\
-\textcolor{cyan}{
-git add file1.txt\\
-git commit\\
-git push\\
-}
-
-The GitHub repository will now reflect the combined work of both branches. 
-
-
+I still have concerns related to the algorithmic decisions I will have to make. In particular, the systems I am modeling are large and complex, and will need to be simplified significantly. Doing so in such a way that my results are not biased will require careful thinking and research. Another concern I have relates to creating a metric to measure how good each of my estimations of the loss aversion coefficient are. There are many empirical values that I will have to choose from and aggregate together. Doing so will require subjective judgements, and again I will have to be cautious so as not to bias my estimate.
 \end{document}
